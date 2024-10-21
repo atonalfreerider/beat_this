@@ -1,9 +1,35 @@
 import numpy as np
 import torch
 import torchaudio
+import tempfile
+import os
 
 
 def load_audio(path, dtype="float64"):
+    # Check if the file is a video format
+    video_extensions = ['.mp4', '.avi', '.mov', '.mkv', '.flv', '.wmv', '.webm']
+    if any(str(path).lower().endswith(ext) for ext in video_extensions):
+        try:
+            from pydub import AudioSegment
+            # Extract audio from video to temporary WAV file
+            audio = AudioSegment.from_file(path)
+            with tempfile.NamedTemporaryFile(suffix='.wav', delete=False) as tmp_file:
+                tmp_path = tmp_file.name
+                audio.export(tmp_path, format='wav')
+            
+            try:
+                # Load the temporary audio file
+                waveform, samplerate = torchaudio.load(tmp_path, channels_first=False)
+                waveform = np.asanyarray(waveform.squeeze().numpy(), dtype=dtype)
+                return waveform, samplerate
+            finally:
+                # Clean up temporary file
+                if os.path.exists(tmp_path):
+                    os.unlink(tmp_path)
+        except Exception as e:
+            print(f"Failed to extract audio from video: {e}")
+            # Fall through to try other methods
+    
     try:
         waveform, samplerate = torchaudio.load(path, channels_first=False)
         waveform = np.asanyarray(waveform.squeeze().numpy(), dtype=dtype)

@@ -1,0 +1,30 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Beat This Analyzer",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/beat_this_analyzer.py",
+            "console": "integratedTerminal",
+            "args": [
+                "/home/john/Videos/Zouk/lucas-luiza-dutch-25.mp4"
+            ],
+            "python": "/home/john/miniconda3/envs/beat_this/bin/python",
+            "justMyCode": false
+        },
+        {
+            "name": "Python: Beat This Analyzer (Debug Mode)",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/beat_this_analyzer.py",
+            "console": "integratedTerminal",
+            "args": [
+                "/home/john/Videos/Zouk/lucas-luiza-dutch-25.mp4",
+                "--debug"
+            ],
+            "python": "/home/john/miniconda3/envs/beat_this/bin/python",
+            "justMyCode": false
+        }
+    ]
+}
