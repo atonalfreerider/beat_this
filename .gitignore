@@ -9,3 +9,4 @@ wandb/
 .vscode/
 beat_this.egg-info/
 build/
+.idea
