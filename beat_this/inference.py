@@ -236,7 +236,7 @@ class Spect2Frames:
     Class for extracting framewise beat and downbeat predictions (logits) from a spectrogram.
     """
 
-    def __init__(self, checkpoint_path="final0", device="cpu", float16=False):
+    def __init__(self, checkpoint_path="final0.ckpt", device="cpu", float16=False):
         super().__init__()
         self.device = torch.device(device)
         self.float16 = float16
@@ -263,7 +263,7 @@ class Audio2Frames(Spect2Frames):
     Class for extracting framewise beat and downbeat predictions (logits) from an audio tensor.
     """
 
-    def __init__(self, checkpoint_path="final0", device="cpu", float16=False):
+    def __init__(self, checkpoint_path="final0.ckpt", device="cpu", float16=False):
         super().__init__(checkpoint_path, device, float16)
         self.spect = LogMelSpect(device=self.device)
 
@@ -294,7 +294,7 @@ class Audio2Beats(Audio2Frames):
     """
 
     def __init__(
-        self, checkpoint_path="final0", device="cpu", float16=False, dbn=False
+        self, checkpoint_path="final0.ckpt", device="cpu", float16=False, dbn=False
     ):
         super().__init__(checkpoint_path, device, float16)
         self.frames2beats = Postprocessor(type="dbn" if dbn else "minimal")

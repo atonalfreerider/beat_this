@@ -1,6 +1,17 @@
 # Beat This!
 Official implementation of the beat tracker from the ISMIR 2024 paper "[Beat This! Accurate Beat Tracking Without DBN Postprocessing](https://arxiv.org/abs/2407.21658)" by Francesco Foscarin, Jan Schlüter and Gerhard Widmer.
 
+# INSTALL
+conda env create -f environment.yml
+
+ckpt: https://cloud.cp.jku.at/index.php/s/7ik4RrBKTS273gp/download?path=%2F&files=final0.ckpt
+place final0.ckpt in beat_this project folder
+
+install ffmpeg
+
+# RUN
+python beat_this_analyzer.py pathtoaudio
+
 * [Inference](#inference)
 * [Available models](#available-models)
 * [Data](#data)
