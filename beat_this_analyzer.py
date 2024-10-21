@@ -15,7 +15,7 @@ def calculate_bpm(start_time, end_time):
     measure_duration = end_time - start_time
     return 240 / measure_duration  # 4 beats per measure * 60 seconds per minute
 
-def split_measures(beats, beat_types, min_bpm=140, max_bpm=180):
+def split_measures(beats, beat_types, min_bpm=120, max_bpm=190):
     split_beats = []
     split_beat_types = []
     i = 0
@@ -54,7 +54,7 @@ def split_measures(beats, beat_types, min_bpm=140, max_bpm=180):
     
     return np.array(split_beats), np.array(split_beat_types)
 
-def calculate_zouk_time(beats, beat_types):
+def calculate_zouk_time(beats, beat_types, max_bpm=190):
     zouk_time_beats = []
     
     i = 0
@@ -66,9 +66,32 @@ def calculate_zouk_time(beats, beat_types):
         measure_bpm = calculate_bpm(start_time, end_time)
         print(f"Measure BPM: {measure_bpm:.2f}")
         
+        if measure_bpm > max_bpm:
+            # Check if the next measure is also above max_bpm
+            if end_index < len(beats) - 1:
+                next_end_index = next((j for j in range(end_index+1, len(beats)) if beat_types[j] == 1), len(beats))
+                next_end_time = beats[min(next_end_index, len(beats) - 1)]
+                next_measure_bpm = calculate_bpm(end_time, next_end_time)
+                
+                if next_measure_bpm > max_bpm:
+                    # Combine the two measures
+                    combined_duration = next_end_time - start_time
+                    combined_bpm = 480 / combined_duration  # 8 beats * 60 seconds
+                    adjusted_bpm = combined_bpm / 4
+                    
+                    # Generate 8 Zouk beats for the combined measure
+                    for j in range(8):
+                        time = start_time + (combined_duration * j / 8)
+                        beat_type = 1 if j in [0, 4] else (2 if j in [3, 6] else 3)
+                        zouk_time_beats.append([time, beat_type])
+                    
+                    i = next_end_index
+                    continue
+        
         # Generate 8 Zouk beats for this measure
+        measure_duration = end_time - start_time
         for j in range(8):
-            time = start_time + (end_time - start_time) * j / 8
+            time = start_time + (measure_duration * j / 8)
             beat_type = 1 if j in [0, 4] else (2 if j in [3, 6] else 3)
             zouk_time_beats.append([time, beat_type])
         
